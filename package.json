@@ -1,0 +1,18 @@
+{
+  "name": "kick_slot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+"scripts": {
+  "Front_end": "npm run dev --prefix Front_end",
+  "Back_end": "npm run dev --prefix Back_end",
+  "dev": "concurrently \"npm run Back_end\" \"npm run Front_end\""
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

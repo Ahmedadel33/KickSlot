@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+
+* {
+  font-family: 'Cairo', sans-serif;
+}
+:root {
+  --main-color: #1a1a1a;
+  --second-color: #a3e635;
+  --hover-color: #84cc16;
+  --text-color: #ffffff;
+  --card-bg: rgba(30, 30, 30, 0.85);
+  --border-color: rgba(163, 230, 53, 0.25);
+  --input-bg: rgba(255, 255, 255, 0.06);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Cairo", sans-serif;
+}
+
+body {
+  background-color: var(--whit-color);
+  color: var(--text-color);
+}

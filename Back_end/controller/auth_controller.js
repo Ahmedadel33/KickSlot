@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
+    console.log("REGISTER CALLED", req.body); 
+
   try {
     const { error, value } = register.validate(req.body, {
       abortEarly: false,
@@ -12,8 +14,11 @@ const registerUser = async (req, res) => {
     if (error) {
       return res.status(400).json({
         msg: "Validation Error",
-        errors: error.details.map((err) => err.message),
+        errors: error.details.map((err) => err.message),    
+      
       });
+
+
     }
     const { name, email, password, phone } = value;
 
@@ -29,9 +34,12 @@ const registerUser = async (req, res) => {
     });
     res.status(201).json({ msg: "User Created" });
   } catch (error) {
-    res.status(500).json({ msg: "Server error", detail: error.message });
-  }
+ console.log("REGISTER ERROR:", error.message);
+    res.status(500).json({ msg: "Server error", detail: error.message });  }
+  
+      
 };
+
 const loginUser = async (req, res) => {
   try {
     const { error, value } = login.validate(req.body, {

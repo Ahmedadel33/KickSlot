@@ -59,16 +59,13 @@ export default function Register() {
       <div
         className={`${styles.registerWrapper} d-flex flex-column align-items-center justify-content-between`}
       >
-        {/* BRAND */}
         <div className={`${styles.brandTop} text-center`}>
           <h1 className={styles.brandTitle}>KICK SLOT</h1>
           <p className={styles.brandSub}>Join the Pitch</p>
         </div>
 
-        {/* CARD */}
         <div className={styles.registerCard}>
           <form onSubmit={handleSubmit} noValidate>
-            {/* Name */}
             <div className={`${styles.fieldGroup} mb-3`}>
               <label className={styles.fieldLabel}>Full Name</label>
               <div className={styles.inputWrap}>
@@ -87,7 +84,6 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Email */}
             <div className={`${styles.fieldGroup} mb-3`}>
               <label className={styles.fieldLabel}>Email</label>
               <div className={styles.inputWrap}>
@@ -106,7 +102,6 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Phone */}
             <div className={`${styles.fieldGroup} mb-3`}>
               <label className={styles.fieldLabel}>Phone Number</label>
               <div className={styles.inputWrap}>
@@ -114,7 +109,7 @@ export default function Register() {
                   type="tel"
                   name="phone"
                   className={styles.kickInput}
-                  placeholder="01XXXXXXXX"
+                  placeholder="01XXXXXX"
                   value={form.phone}
                   onChange={handleChange}
                   required
@@ -151,7 +146,6 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Terms */}
             <div className={`${styles.termsRow} mb-4`}>
               <input
                 type="checkbox"
@@ -169,7 +163,6 @@ export default function Register() {
               </label>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               className={`${styles.kickBtn} w-100`}
@@ -181,7 +174,6 @@ export default function Register() {
               Create Account
             </button>
 
-            {/* Errors */}
             {errors.length > 0 && (
               <div className={styles.errorBox}>
                 {errors.map((err, i) => (
@@ -193,12 +185,10 @@ export default function Register() {
             )}
           </form>
 
-          {/* Divider */}
           <div className={`${styles.divider} my-4`}>
             <span>Or sign up with</span>
           </div>
 
-          {/* Social */}
           <div className="d-flex gap-3">
             <button className={`${styles.socialBtn} flex-fill`}>
               <img
@@ -217,7 +207,6 @@ export default function Register() {
           </div>
         </div>
 
-        {/* Bottom */}
         <div className={`${styles.bottomLink} text-center pb-4`}>
           <p>
             Already have an account?{" "}

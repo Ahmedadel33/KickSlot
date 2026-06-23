@@ -1,0 +1,200 @@
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap");
+
+* { font-family: "Cairo", sans-serif; box-sizing: border-box; }
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: #0d0d0d;
+}
+
+.pitchBg {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1400&q=80");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.2) saturate(0.5);
+  z-index: 0;
+}
+
+.pitchOverlay {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(13,13,13,0.95) 100%);
+  z-index: 1;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* BRAND */
+.brandTop {
+  text-align: center;
+  animation: fadeDown 0.6s ease both;
+}
+
+.shieldIcon {
+  font-size: 2.5rem;
+  color: #a3e635;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 0 20px rgba(163,230,53,0.5));
+}
+
+.brandTitle {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #a3e635;
+  letter-spacing: 3px;
+  margin-bottom: 0.2rem;
+  text-shadow: 0 0 30px rgba(163,230,53,0.4);
+}
+
+.brandSub {
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  background: rgba(20,20,20,0.9);
+  border: 1px solid rgba(163,230,53,0.2);
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(163,230,53,0.05) inset;
+  animation: fadeUp 0.7s ease 0.15s both;
+}
+
+.cardTitle {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.25rem;
+}
+
+.cardSub {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.82rem;
+  margin-bottom: 1.5rem;
+}
+
+/* FIELDS */
+.fieldGroup { margin-bottom: 1.25rem; }
+
+.label {
+  display: block;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.inputWrap { position: relative; }
+
+.input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.75rem 2.6rem 0.75rem 0.9rem;
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: "Cairo", sans-serif;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.input::placeholder { color: rgba(255,255,255,0.2); }
+
+.input:focus {
+  outline: none;
+  border-color: #a3e635;
+  background: rgba(163,230,53,0.05);
+  box-shadow: 0 0 0 3px rgba(163,230,53,0.12);
+}
+
+.iconRight {
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.2);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.iconLeft {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,0.2);
+  font-size: 0.9rem;
+}
+
+.clickable { cursor: pointer; pointer-events: all; transition: color 0.2s; }
+.clickable:hover { color: #a3e635; }
+
+/* ERROR */
+.errorBox {
+  background: rgba(255,80,80,0.1);
+  border: 1px solid rgba(255,80,80,0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+.errorMsg { color: #ff6b6b; font-size: 0.82rem; margin: 0; }
+
+/* BUTTON */
+.submitBtn {
+  width: 100%;
+  background: #a3e635;
+  color: #111;
+  border: none;
+  border-radius: 12px;
+  padding: 0.9rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: "Cairo", sans-serif;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+  box-shadow: 0 4px 20px rgba(163,230,53,0.3);
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #84cc16;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 28px rgba(163,230,53,0.45);
+}
+
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* BOTTOM */
+.bottomLink { text-align: center; }
+
+.userLink {
+  color: rgba(255,255,255,0.35);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.userLink:hover { color: #a3e635; }
+
+/* ANIMATIONS */
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }

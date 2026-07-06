@@ -1,7 +1,7 @@
 const userSchema = require("../model/User");
 const { register, login } = require("./validate/joi_valid");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const jwt  require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
   console.log("REGISTER CALLED", req.body); 

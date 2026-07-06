@@ -4,7 +4,7 @@ const pitchSchema = new mongoose.Schema(
   {
     pitchName: {
       type: String,
-      required: [true, "Pitch name is required"],
+      required: [true, "Pitch name required"],
       trim: true
     },
     pitchPrice: {

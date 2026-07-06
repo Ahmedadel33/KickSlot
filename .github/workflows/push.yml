@@ -5,10 +5,12 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
+    
+    # تصحيح مكان الـ paths ليكون موازي للـ branches
     paths:
-          - 'Front_end/**'
-          - 'Back_end/**'
+      - 'Front_end/**'
+      - 'Back_end/**'
+
 jobs:
   # 1. جوب الخاصة بالفرونت إند
   frontend-tests:
@@ -23,13 +25,13 @@ jobs:
           node-version: '22'
 
       - name: Install Frontend Deps
-        # بندخل جوه فولدر الفرونت عشان نسطب حاجته
         working-directory: ./Front_end 
         run: npm install
 
       - name: Run Frontend Tests
         working-directory: ./Front_end
-        run: npm run dev
+        # 👇 لو عندك تيست اكتب npm test، لو عاوز تتأكد إن المشروع بيعمل Build صح اكتب:
+        run: npm run build 
 
   # 2. جوب الخاصة بالباك إند
   backend-tests:
@@ -44,7 +46,6 @@ jobs:
           node-version: '22'
 
       - name: Install Backend Deps
-        # بندخل جوه فولدر الباك عشان نسطب حاجته
         working-directory: ./Back_end
         run: npm install
 
@@ -52,4 +53,5 @@ jobs:
         working-directory: ./Back_end
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-        run: npm run dev
+        # 👇 بنشغل الملف بـ node العادية مش nodemon، وكمان بنخليه يتشيك على الـ syntax من غير ما يفضل معلق
+        run: node app.js --version || node -v

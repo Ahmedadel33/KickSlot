@@ -2,25 +2,16 @@ import { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styles from "./Login.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEyeSlash,
-  faEye,
-  faEnvelope,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash, faEye, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 export default function Login() {
   const navigate = useNavigate();
-  // const [showPassword, setShowPassword] = useState(false);
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-
-  // this is profisional way
   const [logindata, setlogindata] = useState({
     email: "",
     password: "",
-    showpassword: "",
+    showpassword: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -30,33 +21,32 @@ export default function Login() {
     setLoading(true);
     setError("");
 
-    console.log("Sending Login Data:", logindata.email, logindata.password);
-
     try {
-      const res = await axios.post(
-"http://localhost:8000/auth/login",  {
-    email: logindata.email,
-    password: logindata.password,
-  }
-);
+      const res = await axios.post("http://localhost:8000/auth/login", {
+        email: logindata.email,
+        password: logindata.password,
+      });
 
-      console.log("Server Response Successfully:", res.data);
+      if (res.data && res.data.token) {
+        localStorage.setItem("token", res.data.token);
 
-     if (res.data && res.data.token) {
-  localStorage.setItem("token", res.data.token);
-  navigate("/pitches");
-} else {
-  setError("Login succeeded, but token structure is incorrect.");
-}
+const role = res.data.user.role;
+
+        if (role === "admin") {
+          navigate("/admin/dashboard");
+        } else if (role === "owner") {
+          navigate("/owner/dashboard");
+        } else {
+          navigate("/pitches");
+        }
+      } else {
+        setError("Login succeeded, but token structure is incorrect.");
+      }
     } catch (err) {
-      console.error("Full Axios Error Object:", err);
-      console.error("Error Response Data from Server:", err.response?.data);
-      console.error("Error Status Code:", err.response?.status);
-
       setError(
         err.response?.data?.message ||
-          err.response?.data?.msg ||
-          "Invalid Email or Password.",
+        err.response?.data?.msg ||
+        "Invalid Email or Password."
       );
     } finally {
       setLoading(false);
@@ -68,9 +58,8 @@ export default function Login() {
       <div className={styles.pitchBg} />
       <div className={styles.pitchOverlay} />
 
-      <div
-        className={`${styles.loginWrapper} d-flex flex-column align-items-center justify-content-between`}
-      >
+      <div className={`${styles.loginWrapper} d-flex flex-column align-items-center justify-content-between`}>
+
         <div className={`${styles.brandTop} text-center`}>
           <h1 className={styles.brandTitle}>KICK SLOT</h1>
           <p className={styles.brandSub}>Welcome Back</p>
@@ -78,6 +67,7 @@ export default function Login() {
 
         <div className={styles.loginCard}>
           <form onSubmit={handleSubmit} noValidate>
+
             <div className={`${styles.fieldGroup} mb-3`}>
               <label className={styles.fieldLabel}>Email</label>
               <div className={styles.inputWrap}>
@@ -86,9 +76,7 @@ export default function Login() {
                   className={styles.kickInput}
                   placeholder="email@example.com"
                   value={logindata.email}
-                  onChange={(e) =>
-                    setlogindata({ ...logindata, email: e.target.value })
-                  }
+                  onChange={(e) => setlogindata({ ...logindata, email: e.target.value })}
                   required
                 />
                 <span className={styles.inputIcon}>
@@ -105,19 +93,12 @@ export default function Login() {
                   className={styles.kickInput}
                   placeholder="••••••••"
                   value={logindata.password}
-                  onChange={(e) =>
-                    setlogindata({ ...logindata, password: e.target.value })
-                  }
+                  onChange={(e) => setlogindata({ ...logindata, password: e.target.value })}
                   required
                 />
                 <span
                   className={`${styles.inputIcon} ${styles.clickable}`}
-                  onClick={() =>
-                    setlogindata({
-                      ...logindata,
-                      showpassword: !logindata.showpassword,
-                    })
-                  }
+                  onClick={() => setlogindata({ ...logindata, showpassword: !logindata.showpassword })}
                 >
                   <span className={styles.showpassword}>
                     {logindata.showpassword ? (
@@ -132,36 +113,17 @@ export default function Login() {
             </div>
 
             <div className="text-end mb-4">
-              <a href="#" className={styles.forgotLink}>
-                Forgot your password?
-              </a>
+              <a href="#" className={styles.forgotLink}>Forgot your password?</a>
             </div>
 
-            <button
-              type="submit"
-              className={`${styles.kickBtn} w-100`}
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="spinner-border spinner-border-sm me-2" />
-              ) : null}
+            <button type="submit" className={`${styles.kickBtn} w-100`} disabled={loading}>
+              {loading ? <span className="spinner-border spinner-border-sm me-2" /> : null}
               Sign In
             </button>
 
             {error && (
-              <div
-                className={styles.errorBox}
-                style={{
-                  marginTop: "15px",
-                  backgroundColor: "#ffdddd",
-                  padding: "10px",
-                  borderRadius: "5px",
-                }}
-              >
-                <p
-                  className={styles.errorMsg}
-                  style={{ color: "#cc0000", margin: 0, fontSize: "14px" }}
-                >
+              <div className={styles.errorBox} style={{ marginTop: "15px", backgroundColor: "#ffdddd", padding: "10px", borderRadius: "5px" }}>
+                <p className={styles.errorMsg} style={{ color: "#cc0000", margin: 0, fontSize: "14px" }}>
                   ⚠ {error}
                 </p>
               </div>
@@ -174,11 +136,7 @@ export default function Login() {
 
           <div className="d-flex gap-3">
             <button className={`${styles.socialBtn} flex-fill`}>
-              <img
-                src="https://www.svgrepo.com/show/475656/google-color.svg"
-                width="20"
-                alt="Google"
-              />
+              <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="20" alt="Google" />
               <span>Google</span>
             </button>
             <button className={`${styles.socialBtn} flex-fill`}>
@@ -193,9 +151,7 @@ export default function Login() {
         <div className={`${styles.bottomLink} text-center pb-4`}>
           <p>
             Don't have an account?{" "}
-            <Link to="/register" className={styles.registerLink}>
-              Create one
-            </Link>
+            <Link to="/register" className={styles.registerLink}>Create one</Link>
           </p>
         </div>
       </div>

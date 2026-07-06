@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function AdminPitches() {
+export default function OwnerPitches() {
   const [pitches, setPitches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editPitch, setEditPitch] = useState(null);
@@ -9,7 +9,7 @@ export default function AdminPitches() {
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
-  const token = localStorage.getItem("adminToken");
+  const token = localStorage.getItem("ownerToken");
 
   const fetchPitches = async () => {
     try {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const adminMiddleware = (req, res, next) => {
+const ownerMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -11,8 +11,8 @@ const adminMiddleware = (req, res, next) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     console.log("DECODED TOKEN:", decoded);
 
-    if (decoded.role !== "admin") {
-      return res.status(403).json({ msg: "Access denied. Admins only." });
+     if (decoded.role !== "owner") {
+      return res.status(403).json({ msg: "Access denied. Owners only." });
     }
 
     req.user = decoded;
@@ -22,4 +22,4 @@ const adminMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = adminMiddleware;
+ module.exports = ownerMiddleware;

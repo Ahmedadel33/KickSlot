@@ -1,4 +1,4 @@
-export default function AdminBookings() {
+export default function OwnerBookings() {
   return (
     <div>
       <h2 style={{ marginBottom: "20px", color: "#1a202c" }}>📅 Booking Management</h2>

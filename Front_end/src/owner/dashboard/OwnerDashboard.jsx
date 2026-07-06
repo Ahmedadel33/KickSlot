@@ -1,46 +1,59 @@
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
-  { to: "/admin/dashboard",      icon: "📊", label: "Dashboard Overview" },
-  { to: "/admin/add-pitch",      icon: "➕", label: "Add New Pitch" },
-  { to: "/admin/pitches",        icon: "⚽", label: "View All Pitches" },
-  { to: "/admin/bookings",       icon: "📅", label: "Booking Management" },
-  { to: "/admin/users",          icon: "👥", label: "User Management" },
-  { to: "/admin/settings",       icon: "⚙️", label: "Settings" },
+  { to: "/owner/dashboard",  icon: "📊", label: "Overview" },
+  { to: "/owner/add-pitch",  icon: "➕", label: "Add New Pitch" },
+  { to: "/owner/pitches",    icon: "⚽", label: "My Pitches" },
+  { to: "/owner/bookings",   icon: "📅", label: "Bookings" },
+  { to: "/owner/reviews",    icon: "⭐", label: "Reviews" },
+  { to: "/owner/settings",   icon: "⚙️", label: "Settings" },
 ];
 
-export default function Dashboard() {
+export default function OwnerDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const ownerName = localStorage.getItem("ownerName") || "Owner";
+
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    localStorage.removeItem("adminEmail");
-    navigate("/admin/login");
+    localStorage.removeItem("ownerToken");
+    localStorage.removeItem("ownerEmail");
+    localStorage.removeItem("ownerName");
+    navigate("/owner/login");
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "Cairo, sans-serif" 
-}}>
+    <div style={{ display: "flex", height: "100vh", fontFamily: "Cairo, sans-serif" }}>
 
-       <div style={{
+      {/* SIDEBAR */}
+      <div style={{
         width: "250px", background: "#1a202c", color: "white",
         padding: "20px", display: "flex", flexDirection: "column",
-        justifyContent: "space-between", flexShrink: 0,
-        
+        justifyContent: "space-between", flexShrink: 0
       }}>
         <div>
+          {/* BRAND */}
           <div style={{ marginBottom: "24px" }}>
             <h3 style={{ margin: 0, color: "#a3e635", letterSpacing: "1px", fontSize: "1.1rem" }}>
-              ⚽ KickSlot Admin
+              ⚽ Kick Slot
             </h3>
             <p style={{ margin: "4px 0 0", color: "#718096", fontSize: "0.75rem" }}>
-              Management Panel
+              Owner Portal
             </p>
+          </div>
+
+          {/* OWNER INFO */}
+          <div style={{
+            background: "rgba(163,230,53,0.1)", border: "1px solid rgba(163,230,53,0.2)",
+            borderRadius: "10px", padding: "10px 12px", marginBottom: "16px"
+          }}>
+            <p style={{ margin: 0, fontSize: "0.75rem", color: "#718096" }}>Logged in as</p>
+            <p style={{ margin: 0, fontSize: "0.9rem", fontWeight: 700, color: "#a3e635" }}>{ownerName}</p>
           </div>
 
           <hr style={{ borderColor: "#2d3748", marginBottom: "16px" }} />
 
+          {/* NAV ITEMS */}
           <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
             {navItems.map(item => {
               const isActive = location.pathname === item.to;
@@ -67,7 +80,19 @@ export default function Dashboard() {
           </ul>
         </div>
 
-      
+        {/* LOGOUT */}
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "#e53e3e", color: "white", border: "none",
+            padding: "10px 15px", borderRadius: "8px", cursor: "pointer",
+            width: "100%", textAlign: "left", fontSize: "0.9rem",
+            display: "flex", alignItems: "center", gap: "8px",
+            fontFamily: "Cairo, sans-serif"
+          }}
+        >
+          🚪 Logout
+        </button>
       </div>
 
       {/* CONTENT */}
@@ -77,7 +102,6 @@ export default function Dashboard() {
       }}>
         <Outlet />
       </div>
-
     </div>
   );
 }

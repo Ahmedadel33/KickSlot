@@ -58,7 +58,6 @@
 }
 
 .titleIcon { margin-right: 0.6rem; }
-
 .pageSubtitle { color: rgba(255,255,255,0.45); font-size: 0.95rem; margin: 0; }
 
 .card {
@@ -95,7 +94,6 @@
 }
 
 .input::placeholder { color: rgba(255,255,255,0.25); }
-
 .input:focus {
   outline: none;
   border-color: #a3e635;
@@ -120,15 +118,55 @@
   transform: none;
 }
 
-.preview {
+/* ── UPLOAD ── */
+.uploadArea {
+  display: block;
   width: 100%;
-  height: 160px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-top: 0.75rem;
-  border: 1px solid rgba(163,230,53,0.2);
+  border: 2px dashed rgba(163,230,53,0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.25s;
+  min-height: 160px;
 }
 
+.uploadArea:hover { border-color: #a3e635; }
+
+.uploadPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+}
+
+.uploadIcon {
+  font-size: 2rem;
+  color: rgba(163,230,53,0.5);
+  margin-bottom: 0.5rem;
+}
+
+.uploadPlaceholder p {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.6);
+}
+
+.uploadPlaceholder span {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+}
+
+.preview {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── MESSAGES ── */
 .errorBox {
   background: rgba(255,80,80,0.1);
   border: 1px solid rgba(255,80,80,0.3);
@@ -149,6 +187,7 @@
 }
 .successBox p { margin: 0; }
 
+/* ── BUTTON ── */
 .submitBtn {
   width: 100%;
   background: #a3e635;

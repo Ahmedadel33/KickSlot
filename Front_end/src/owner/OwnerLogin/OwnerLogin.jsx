@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./AdminLogin.module.css";
+import styles from "./OwnerLogin.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faEnvelope, faLock, faShield } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faEyeSlash, faEnvelope, faLock, faStore } from "@fortawesome/free-solid-svg-icons";
 
-export default function AdminLogin() {
+export default function OwnerLogin() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "", showPassword: false });
   const [loading, setLoading] = useState(false);
@@ -16,13 +16,14 @@ export default function AdminLogin() {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post("http://localhost:8000/admin/login", {
+      const res = await axios.post("http://localhost:8000/owner/login", {
         email: form.email.trim(),
         password: form.password,
       });
-      localStorage.setItem("adminToken", res.data.token);
-      localStorage.setItem("adminEmail", form.email.trim());
-      navigate("/admin/dashboard");
+      localStorage.setItem("ownerToken", res.data.token);
+      localStorage.setItem("ownerEmail", res.data.user.email);
+      localStorage.setItem("ownerName", res.data.user.name);
+      navigate("/owner/dashboard");
     } catch (err) {
       setError(err.response?.data?.msg || "Invalid credentials");
     } finally {
@@ -37,16 +38,16 @@ export default function AdminLogin() {
       <div className={styles.wrapper}>
 
         <div className={styles.brandTop}>
-          <div className={styles.shieldIcon}>
-            <FontAwesomeIcon icon={faShield} />
+          <div className={styles.storeIcon}>
+            <FontAwesomeIcon icon={faStore} />
           </div>
           <h1 className={styles.brandTitle}>KICK SLOT</h1>
-          <p className={styles.brandSub}>Admin Panel</p>
+          <p className={styles.brandSub}>Owner Portal</p>
         </div>
 
         <div className={styles.card}>
-          <h2 className={styles.cardTitle}>Admin Access</h2>
-          <p className={styles.cardSub}>Restricted to authorized personnel only</p>
+          <h2 className={styles.cardTitle}>Owner Access</h2>
+          <p className={styles.cardSub}>Manage your pitches and bookings</p>
 
           <form onSubmit={handleSubmit} noValidate>
             <div className={styles.fieldGroup}>
@@ -55,7 +56,7 @@ export default function AdminLogin() {
                 <input
                   type="email"
                   className={styles.input}
-                  placeholder="admin@kickslot.com"
+                  placeholder="owner@kickslot.com"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   required
@@ -97,7 +98,7 @@ export default function AdminLogin() {
 
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? <span className="spinner-border spinner-border-sm me-2" /> : null}
-              Sign In as Admin
+              Sign In as Owner
             </button>
           </form>
         </div>

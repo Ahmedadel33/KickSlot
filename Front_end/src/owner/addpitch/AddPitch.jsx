@@ -1,37 +1,61 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import styles from "./AddPitch.module.css";
+import styles from "./addpitch.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFutbol, faImage, faLocationDot, faDollarSign, faAlignLeft, faTag } from "@fortawesome/free-solid-svg-icons";
+import { faFutbol, faLocationDot, faDollarSign, faAlignLeft, faTag, faUpload } from "@fortawesome/free-solid-svg-icons";
 
-export default function AddPitch() {
+export default function OwnerAddPitch() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const [success, setSuccess] = useState("");
+  const [preview, setPreview] = useState(null);
   const [form, setForm] = useState({
     pitchName: "",
-    pitchImage: "",
     pitchPrice: "",
     pitchLocation: "",
     pitchDescription: "",
   });
+  const [imageFile, setImageFile] = useState(null);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrors([]);
     setSuccess("");
+
     try {
-const token = localStorage.getItem("adminToken");
-     await axios.post("http://localhost:8000/pitch/addpitch", form, {
-        headers: { Authorization: `Bearer ${token}` }
+      const token = localStorage.getItem("ownerToken");
+
+      const formData = new FormData();
+      formData.append("pitchName", form.pitchName);
+      formData.append("pitchPrice", form.pitchPrice);
+      formData.append("pitchLocation", form.pitchLocation);
+      formData.append("pitchDescription", form.pitchDescription);
+      if (imageFile) formData.append("pitchImage", imageFile);
+
+      await axios.post("http://localhost:8000/owner/add-pitch", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       setSuccess("Pitch added successfully!");
-      setForm({ pitchName: "", pitchImage: "", pitchPrice: "", pitchLocation: "", pitchDescription: "" });
+      setForm({ pitchName: "", pitchPrice: "", pitchLocation: "", pitchDescription: "" });
+      setImageFile(null);
+      setPreview(null);
     } catch (err) {
       const data = err.response?.data;
       if (data?.errors) {
@@ -50,8 +74,6 @@ const token = localStorage.getItem("adminToken");
       <div className={styles.pitchOverlay} />
 
       <div className={styles.container}>
-
-        {/* HEADER */}
         <button className={styles.backBtn} onClick={() => navigate(-1)}>← Back</button>
 
         <div className={styles.pageHeader}>
@@ -59,10 +81,9 @@ const token = localStorage.getItem("adminToken");
             <FontAwesomeIcon icon={faFutbol} className={styles.titleIcon} />
             Add New Pitch
           </h1>
-          <p className={styles.pageSubtitle}>Fill in the details to add a new pitch</p>
+          <p className={styles.pageSubtitle}>Fill in the details to list your pitch</p>
         </div>
 
-        {/* FORM */}
         <div className={styles.card}>
           <form onSubmit={handleSubmit} noValidate>
 
@@ -83,25 +104,29 @@ const token = localStorage.getItem("adminToken");
               </div>
             </div>
 
+            {/* Image Upload */}
             <div className={styles.fieldGroup}>
-              <label className={styles.label}>Image URL</label>
-              <div className={styles.inputWrap}>
+              <label className={styles.label}>Pitch Image</label>
+              <label className={styles.uploadArea}>
                 <input
-                  type="text"
-                  name="pitchImage"
-                  className={styles.input}
-                  placeholder="https://example.com/image.jpg"
-                  value={form.pitchImage}
-                  onChange={handleChange}
-                  required
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
                 />
-                <span className={styles.icon}><FontAwesomeIcon icon={faImage} /></span>
-              </div>
-              {form.pitchImage && (
-                <img src={form.pitchImage} alt="preview" className={styles.preview} />
-              )}
+                {preview ? (
+                  <img src={preview} alt="preview" className={styles.preview} />
+                ) : (
+                  <div className={styles.uploadPlaceholder}>
+                    <FontAwesomeIcon icon={faUpload} className={styles.uploadIcon} />
+                    <p>Click to upload image</p>
+                    <span>JPG, PNG, WEBP — Max 3MB</span>
+                  </div>
+                )}
+              </label>
             </div>
 
+            {/* Price */}
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Price per Hour (EGP)</label>
               <div className={styles.inputWrap}>
@@ -118,6 +143,7 @@ const token = localStorage.getItem("adminToken");
               </div>
             </div>
 
+            {/* Location */}
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Location</label>
               <div className={styles.inputWrap}>
@@ -125,7 +151,7 @@ const token = localStorage.getItem("adminToken");
                   type="text"
                   name="pitchLocation"
                   className={styles.input}
-                  placeholder="e.g. Hay Al Yarmouk, Riyadh"
+                  placeholder="e.g. Hay Al Yarmouk, Cairo"
                   value={form.pitchLocation}
                   onChange={handleChange}
                   required
@@ -134,6 +160,7 @@ const token = localStorage.getItem("adminToken");
               </div>
             </div>
 
+            {/* Description */}
             <div className={styles.fieldGroup}>
               <label className={styles.label}>Description</label>
               <div className={styles.inputWrap}>
@@ -162,7 +189,6 @@ const token = localStorage.getItem("adminToken");
               {loading ? <span className="spinner-border spinner-border-sm me-2" /> : null}
               Add Pitch
             </button>
-
           </form>
         </div>
       </div>

@@ -3,7 +3,7 @@ const { login } = require("./validate/joi_valid");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const adminLogin = async (req, res) => {
+const ownerLogin = async (req, res) => {
   try {
     const { error, value } = login.validate(req.body, {
       abortEarly: false,
@@ -20,12 +20,12 @@ const adminLogin = async (req, res) => {
     const { email, password } = value;
 
     const user = await userSchema.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: "Admin not found" });
+     if (!user) {
+      return res.status(400).json({ msg: "Owner account not found" });
     }
 
-    if (user.role !== "admin") {
-      return res.status(403).json({ msg: "Access denied. Admins only." });
+     if (user.role !== "owner") {
+      return res.status(403).json({ msg: "Access denied. Owners only." });
     }
 
     const comparePass = await bcrypt.compare(password, user.password);
@@ -33,17 +33,21 @@ const adminLogin = async (req, res) => {
       return res.status(400).json({ msg: "Invalid password" });
     }
 
-    const token = jwt.sign(
+     const token = jwt.sign(
       { id: user._id, role: user.role },
       process.env.SECRET_KEY,
       { expiresIn: "1d" }
     );
 
-    res.status(200).json({ msg: "Admin login successful", token });
+     res.status(200).json({ 
+      msg: "Owner login successful", 
+      token,
+      user: { name: user.name, email: user.email, role: user.role }
+    });
   } catch (error) {
-    console.log("ADMIN LOGIN ERROR:", error.message);
+    console.log("OWNER LOGIN ERROR:", error.message);
     res.status(500).json({ msg: "Server error" });
   }
 };
 
-module.exports = { adminLogin };
+module.exports = { ownerLogin };

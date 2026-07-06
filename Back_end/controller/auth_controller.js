@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
-    console.log("REGISTER CALLED", req.body); 
+  console.log("REGISTER CALLED", req.body); 
 
   try {
     const { error, value } = register.validate(req.body, {
@@ -15,12 +15,10 @@ const registerUser = async (req, res) => {
       return res.status(400).json({
         msg: "Validation Error",
         errors: error.details.map((err) => err.message),    
-      
       });
-
-
     }
-    const { name, email, password, phone } = value;
+    
+    const { name, email, password, phone, role } = req.body; 
 
     const existUser = await userSchema.findOne({ email });
     if (existUser) return res.status(400).json({ msg: "User already exist" });
@@ -31,13 +29,13 @@ const registerUser = async (req, res) => {
       email,
       password: hashPassword,
       phone,
+      role: role || "user" // لو مفيش role مبعوت، السيستم هيخليه لاعب عادي user تلقائياً
     });
     res.status(201).json({ msg: "User Created" });
   } catch (error) {
- console.log("REGISTER ERROR:", error.message);
-    res.status(500).json({ msg: "Server error", detail: error.message });  }
-  
-      
+    console.log("REGISTER ERROR:", error.message);
+    res.status(500).json({ msg: "Server error", detail: error.message });  
+  }
 };
 
 const loginUser = async (req, res) => {
@@ -46,8 +44,6 @@ const loginUser = async (req, res) => {
       abortEarly: false,
       stripUnknown: true,
     });
-
-   
 
     if (error) {
       return res.status(400).json({
@@ -73,13 +69,24 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: userexsit._id },
+      { 
+        id: userexsit._id,
+        role: userexsit.role 
+      },
       process.env.SECRET_KEY,
       { expiresIn: "1d" }
     );
-    console.log("5. token created");
+    console.log("5. token created for role:", userexsit.role);
 
-    res.status(200).json({ msg: "Login successful", token });
+    res.status(200).json({ 
+      msg: "Login successful", 
+      token,
+      user: {
+        name: userexsit.name,
+        email: userexsit.email,
+        role: userexsit.role
+      }
+    });
   } catch (error) {
     console.log("ERROR:", error.message);
     res.status(500).json({ msg: "Server error" });

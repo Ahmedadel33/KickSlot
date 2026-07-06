@@ -1,34 +1,46 @@
 const pitchModel = require("../model/pitchModel");
-const { addPitch } = require("./validate/joi_pitch");
+const addPitch  = require("./validate/joi_pitch"); 
+ 
+const getById = async (req, res) => {
+  try {
+    const { id } = req.params;  
+
+    const pitch = await pitchModel.findById(id);
+    if (!pitch) {
+      return res.status(404).json({ msg: "Pitch not found" });
+    }
+    res.status(200).json({ msg: "Pitch fetched", pitch });
+  } catch (error) {
+    console.error("Error fetching pitch by ID:", error);
+    res.status(500).json({ msg: "Server error" });
+  } 
+};
 
 const addPitchs = async (req, res) => {
-  const { error, value } = addPitch.validate(req.body, {
-    abortEarly: false,
-    stripUnknown: true
-  });
-
-  if (error) {
-    return res.status(400).json({
-      msg: "Validation Error",
-      errors: error.details.map((err) => err.message)
-    });
-  }
-
-  const { pitchName, pitchImage, pitchPrice, pitchLocation, pitchDescription } = value;
-
   try {
-    const adminId = req.user.id;
+    const { pitchName, pitchPrice, pitchLocation, pitchDescription } = req.body;
+    
+     const pitchImage = req.file ? `/uploads/${req.file.filename}` : null;
+    
+    if (!pitchImage) {
+      return res.status(400).json({ msg: "Pitch image is required" });
+    }
+
     const newPitch = await pitchModel.create({
-      pitchName, pitchImage, pitchPrice, pitchLocation, pitchDescription,
-      owner: adminId
+      pitchName,
+      pitchImage,
+      pitchPrice,
+      pitchLocation,
+      pitchDescription,
+      owner: req.user.id
     });
+
     res.status(201).json({ msg: "Pitch Added", pitch: newPitch });
   } catch (err) {
     console.log("Error adding pitch:", err.message);
-    res.status(500).json({ msg: "Server error failed to add pitch" });
+    res.status(500).json({ msg: "Server error" });
   }
 };
-
 const getAdminPitches = async (req, res) => {
   try {
     const adminPitches = await pitchModel.find({ owner: req.user.id });
@@ -73,4 +85,4 @@ const deletePitch = async (req, res) => {
   }
 };
 
-module.exports = { addPitchs, getPitchs, getAdminPitches, updatePitch, deletePitch };
+ module.exports = {getById, addPitchs, getPitchs, getAdminPitches, updatePitch, deletePitch };

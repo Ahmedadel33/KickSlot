@@ -1,0 +1,53 @@
+name: Fullstack CI Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+    paths:
+          - 'Front_end/**'
+          - 'Back_end/**'
+jobs:
+  # 1. جوب الخاصة بالفرونت إند
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Frontend Deps
+        # بندخل جوه فولدر الفرونت عشان نسطب حاجته
+        working-directory: ./Front_end 
+        run: npm install
+
+      - name: Run Frontend Tests
+        working-directory: ./Front_end
+        run: npm run dev
+
+  # 2. جوب الخاصة بالباك إند
+  backend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Backend Deps
+        # بندخل جوه فولدر الباك عشان نسطب حاجته
+        working-directory: ./Back_end
+        run: npm install
+
+      - name: Run Backend Tests
+        working-directory: ./Back_end
+        run: npm run dev

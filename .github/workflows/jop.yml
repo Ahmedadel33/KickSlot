@@ -1,0 +1,25 @@
+on:
+  workflow_dispatch:
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+   -run: echo "welcome ya bro in job 1"
+
+  job2:
+    runs-on: ubuntu-latest 
+    needs: job1
+    steps:
+    -run: echo "welcome ya bro in job 2"
+   
+  job3:
+    runs-on: ubuntu-latest
+    needs: job1
+    steps:
+    -run: echo "welcome ya bro in job 3"     
+
+  job4:
+    runs-on: ubuntu-latest
+    needs: [job2 , job3]
+    steps:
+    -run: echo "welcome ya bro in job 4"

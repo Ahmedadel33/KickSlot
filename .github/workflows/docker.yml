@@ -1,0 +1,10 @@
+on: 
+  workflow_dispatch:
+
+jobs:
+  docker:
+   runs-on: ubuntu-latest
+
+   steps:
+     - name: run command 
+       run: echo "welcome to docker"

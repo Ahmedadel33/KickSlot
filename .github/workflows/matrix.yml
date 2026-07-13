@@ -1,13 +1,37 @@
+name: Python Matrix Testing
+
+# بيشتغل لما تبعت كود للـ main branch أو بشكل يدوي
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
 jobs:
   test:
+    name: Test on ${{ matrix.os }} with Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
+    
     strategy:
+      # دي الماتريكس اللي هتشغل الـ 4 توليفات
       matrix:
         os: [ubuntu-latest, windows-latest]
         python-version: [3.9, 3.10]
+        
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      # 1. سحب الكود من الـ Repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. إعداد نسخة البايثون المطلوبة
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python --version
+
+      # 3. التأكد من الإصدار
+      - name: Run Python version check
+        run: python --version
+        
+      # هنا تقدر تضيف خطوة اختبار حقيقية لو عندك ملف test.py
+      # - name: Run tests
+      #   run: python -m unittest discover

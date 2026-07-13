@@ -15,5 +15,15 @@ jobs:
     steps:
       - name: run script
         run: echo "workflow manual"
+
+      - name: run in docker
+        uses: docker://alpine:3.14
+        with:
+          enteypoint: bin/sh
+          args: |
+            -c " echo 'run command inside container' "
+
+      - name:  run last command
+        run : echo "this is last command"
   
 

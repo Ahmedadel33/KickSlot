@@ -1,14 +1,15 @@
 on:
   workflow_dispatch:
     inputs:
-      inviroments:
-        description: choose enviroment
-        default: staging
+      environment:
+        description: 'choose environment'
+        default: 'staging'
         required: true
         type: choice
         options:
           - staging
           - production
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,11 +20,9 @@ jobs:
       - name: run in docker
         uses: docker://alpine:3.14
         with:
-          enteypoint: bin/sh
+          entrypoint: /bin/sh 
           args: |
-            -c " echo 'run command inside container' "
+            -c "echo 'run command inside container'"
 
-      - name:  run last command
-        run : echo "this is last command"
-  
-
+      - name: run last command
+        run: echo "this is last command"
